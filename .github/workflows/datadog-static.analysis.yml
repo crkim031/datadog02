@@ -1,0 +1,25 @@
+name: Datadog Static Analysis
+
+on: 
+  push: # Push 이벤트 발생 시 실행
+
+jobs:
+  check-quality:
+    runs-on: ubuntu-latest
+    name: Datadog Static Analyzer
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure Datadog Test Visibility
+        uses: datadog/test-visibility-github-action@v2
+        with:
+          languages: java
+          api_key: ${{ secrets.DD_API_KEY }}
+          site: us3.datadoghq.com # Datadog 사이트 변경 가능
+
+      - name: Run unit tests
+        run: |
+          mvn clean test
+
